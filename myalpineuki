@@ -9,11 +9,14 @@ __() { printf "\n\033[1;32m* %s [%s]\033[0m\n" "$1" "$(date -u +"%Y-%m-%dT%H:%M:
 workspace="${XDG_CACHE_HOME:-${HOME}/.cache}/myalpineuki"
 mkdir -p "${workspace}"
 
-ROOTFS_DEST="${workspace}/rootfs"
-doas rm -rf "${ROOTFS_DEST}"
+# TODO remove vmlinuz-edge once we know it's working
+#LINUX_SRC="${ROOTFS_DEST}/boot/vmlinuz-edge"
+LINUX_SRC="${HOME}/src/linux-stable/arch/x86/boot/bzImage"
 
+ROOTFS_DEST="${workspace}/rootfs"
 INITRAMFS_DEST="${workspace}/myinitramfs"
 IMAGE_DEST="${workspace}/bootx64.efi"
+doas rm -rf "${ROOTFS_DEST}" "${INITRAMFS_DEST}" "${IMAGE_DEST}"
 
 __ "Building rootfs"
 
@@ -24,13 +27,14 @@ echo "disable_trigger=yes" | doas tee "${ROOTFS_DEST}/etc/mkinitfs/mkinitfs.conf
 pkgs="$(grep -v -e '^[ \t]*#' -e '^[ \t]*$' packages)"
 
 # TODO write a useful date here
-date -u +"%Y-%m-%dT%H:%M:%SZ" | doas tee "${ROOTFS_DEST}/etc/frood-release"
+date -u +"%Y-%m-%dT%H:%M:%SZ" | doas tee "${ROOTFS_DEST}/etc/myalpineuki-release"
 doas alpine-make-rootfs \
     --fs-skel-chown root:root \
     --fs-skel-dir root \
     --packages "${pkgs}" \
     --repositories-file /etc/apk/repositories \
     --timezone 'Canada/Eastern' \
+    --script-chroot \
     "${ROOTFS_DEST}" setup.sh
 
 __ "Building initramfs"
@@ -41,7 +45,7 @@ __ "Building UKI image"
 
 # The default rdinit is /init, while the default init is /sbin/init.
 efi-mkuki -c "rdinit=/sbin/init" -o "${IMAGE_DEST}" \
-    "${ROOTFS_DEST}/boot/vmlinuz-edge" \
+    "${LINUX_SRC}" \
     "${ROOTFS_DEST}/boot/amd-ucode.img" \
     "${INITRAMFS_DEST}"
 

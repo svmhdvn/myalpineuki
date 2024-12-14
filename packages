@@ -57,7 +57,10 @@ libarchive-dev
 libffi-dev
 libnotify
 libva-utils
-linux-edge
+
+# TODO add back if needed
+#linux-edge
+
 linux-firmware-amd
 linux-firmware-mediatek
 linux-firmware-other
