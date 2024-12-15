@@ -11,6 +11,7 @@ binutils
 bison
 busybox-mdev-openrc
 bzip2
+ccache
 coreutils
 curl
 diffutils
@@ -52,6 +53,7 @@ imv
 isync
 iwd
 kakoune
+kbd-bkeymaps
 keepassxc
 libarchive-dev
 libffi-dev
@@ -61,7 +63,8 @@ libva-utils
 # TODO add back if needed
 #linux-edge
 
-linux-firmware-amd
+linux-firmware-amdgpu
+linux-firmware-intel
 linux-firmware-mediatek
 linux-firmware-other
 linux-firmware-rtl_bt
