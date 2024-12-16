@@ -2,6 +2,9 @@
 
 set -eu
 
+# NOTE: git can't track empty directories, so mkdir them all here
+mkdir -p /home
+
 # TODO this seems useful maybe? add it to /etc/runlevels if so
 #rc-update add smartd default
 

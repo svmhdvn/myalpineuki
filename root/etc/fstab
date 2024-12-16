@@ -1,3 +1,4 @@
-/dev/nvme0n1p2	swap	swap	defaults	0	0
 /dev/nvme0n1p1	/boot/efi	vfat	rw,noatime,errors=remount-ro	0	2
+/dev/nvme0n1p2	swap	swap	defaults	0	0
+/dev/nvme0n1p3	/home	ext4	rw,noatime,nofail	0	1
 tmpfs	/tmp	tmpfs	nosuid,nodev,noatime	0	0

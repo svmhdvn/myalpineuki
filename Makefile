@@ -20,8 +20,8 @@ all: clean kernel rootfs initramfs uki
 kernel:
 	git     -C '$(linux_src)' fetch --depth 1 origin tag 'v$(latest_kernel)'
 	git     -C '$(linux_src)' checkout                   'v$(latest_kernel)'
-	$(MAKE) -C '$(linux_src)'               CC='ccache cc' KBUILD_BUILD_TIMESTAMP='' oldconfig
-	$(MAKE) -C '$(linux_src)' -j"$$(nproc)" CC='ccache cc' KBUILD_BUILD_TIMESTAMP=''
+	$(MAKE) -C '$(linux_src)'               KBUILD_BUILD_TIMESTAMP='' oldconfig
+	$(MAKE) -C '$(linux_src)' -j"$$(nproc)" KBUILD_BUILD_TIMESTAMP=''
 	cp '$(linux_src)/.config' "$(HOME)/s/dotfiles/kernel_configs/$$(hostname)_$(latest_kernel).config"
 
 rootfs:
@@ -48,6 +48,13 @@ uki:
 	    '$(bzImage)' \
 	    '$(rootfs_dest)/boot/$(cpu_vendor)-ucode.img' \
 	    '$(initramfs_dest)'
+
+install:
+	doas cp /boot/efi/EFI/myalpineuki-cur/bootx64.efi /boot/efi/EFI/myalpineuki-prev/bootx64.efi
+	doas cp '$(workspace)/bootx64.efi' /boot/efi/EFI/myalpineuki-cur/bootx64.efi
+
+rollback:
+	doas cp /boot/efi/EFI/myalpineuki-prev/bootx64.efi /boot/efi/EFI/myalpineuki-cur/bootx64.efi
 
 clean:
 	doas rm -rf '$(rootfs_dest)' '$(initramfs_dest)'
