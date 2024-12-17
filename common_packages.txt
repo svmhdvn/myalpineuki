@@ -2,8 +2,6 @@ aerc
 alpine-base
 alpine-make-rootfs
 alpine-sdk
-amd-ucode
-arch-install-scripts
 bat
 bc
 bind-tools
@@ -31,7 +29,6 @@ firefox
 fish
 flatpak
 flex
-font-juliamono
 font-noto
 font-noto-tamil
 foot
@@ -40,7 +37,6 @@ g++
 gammastep
 gawk
 gcc
-gettext
 git
 git-diff-highlight
 git-email
@@ -51,7 +47,6 @@ hledger
 htop
 imv
 isync
-iwd
 kakoune
 kbd-bkeymaps
 keepassxc
@@ -63,12 +58,6 @@ libva-utils
 # TODO add back if needed
 #linux-edge
 
-linux-firmware-amdgpu
-linux-firmware-intel
-linux-firmware-mediatek
-linux-firmware-other
-linux-firmware-rtl_bt
-linux-firmware-rtl_nic
 linux-headers
 lm-sensors
 make
@@ -82,7 +71,6 @@ mosh
 mpv
 nano
 ncurses-dev
-npm
 openresolv
 openssh
 openssl
@@ -93,7 +81,6 @@ pipewire
 pipewire-pulse
 pipewire-tools
 polkit
-radeontop
 ripgrep
 rsync
 seatd
@@ -105,14 +92,13 @@ sway
 sway-portalsconf
 syncthing
 tar
+thunderbird
 tofi
 ttf-dejavu
 udev-init-scripts
 udev-init-scripts-openrc
 unzip
 wget
-wireguard-tools-wg
-wireless-regdb
 wireplumber
 wl-clipboard
 xdg-desktop-portal

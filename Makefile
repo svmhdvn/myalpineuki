@@ -1,14 +1,20 @@
 .POSIX:
 .SUFFIXES:
 
-linux_src = $(HOME)/src/linux-stable
-bzImage = $(linux_src)/arch/x86/boot/bzImage
+host != hostname
+
 # NOTE: use vmlinuz-edge in case a newer custom kernel breaks
 #bzImage = $(rootfs_dest)/boot/vmlinuz-edge
 
-workspace = $(HOME)/.cache/myalpineuki
+rootfs_src = $(CURDIR)/hosts/$(host)/root
+common_pkgs = $(CURDIR)/common_packages.txt
+host_pkgs = $(CURDIR)/hosts/$(host)/packages.txt
+
+workspace = $(HOME)/.cache/myalpineuki/$(host)
 rootfs_dest = $(workspace)/rootfs
 initramfs_dest = $(workspace)/myinitramfs
+linux_src = $(workspace)/linux-stable
+bzImage = $(linux_src)/arch/x86/boot/bzImage
 
 latest_kernel != curl -s 'https://kernel.org' | grep -A1 latest_link | grep -o '>.*<' | tr -d '><'
 cpu_vendor != grep vendor_id /proc/cpuinfo | head -1 | awk '$$3 == "GenuineIntel" { print "intel" }; $$3 == "AuthenticAMD" { print "amd" }'
@@ -18,11 +24,15 @@ all: clean kernel rootfs initramfs uki
 
 # TODO automatically git commit and push to s/dotfiles/kernel_configs
 kernel:
-	git     -C '$(linux_src)' fetch --depth 1 origin tag 'v$(latest_kernel)'
-	git     -C '$(linux_src)' checkout                   'v$(latest_kernel)'
-	$(MAKE) -C '$(linux_src)'               KBUILD_BUILD_TIMESTAMP='' oldconfig
-	$(MAKE) -C '$(linux_src)' -j"$$(nproc)" KBUILD_BUILD_TIMESTAMP=''
-	cp '$(linux_src)/.config' "$(HOME)/s/dotfiles/kernel_configs/$$(hostname)_$(latest_kernel).config"
+	if ! test -d '$(linux_src)'; then \
+	  git clone --depth=1 --branch='v$(latest_kernel)' git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git '$(linux_src)'; \
+	elif git -C '$(linux_src)' tag | xargs test 'v$(latest_kernel)' !=; then \
+	  git -C '$(linux_src)' fetch --depth 1 origin tag 'v$(latest_kernel)'; \
+	  git -C '$(linux_src)' checkout                   'v$(latest_kernel)'; \
+    	fi
+	$(MAKE) -C '$(linux_src)'               CC='ccache cc' KBUILD_BUILD_TIMESTAMP='' oldconfig
+	$(MAKE) -C '$(linux_src)' -j"$$(nproc)" CC='ccache cc' KBUILD_BUILD_TIMESTAMP=''
+	cp '$(linux_src)/.config' "$(HOME)/s/dotfiles/kernel_configs/$(host)_$(latest_kernel).config"
 
 rootfs:
 	# Stop mkinitfs from running during apk install.
@@ -32,8 +42,8 @@ rootfs:
 	date -u '+%Y-%m-%dT%H:%M:%SZ' | doas tee '$(rootfs_dest)/etc/myalpineuki-release'
 	doas alpine-make-rootfs \
 	    --fs-skel-chown root:root \
-	    --fs-skel-dir root \
-	    --packages "$$(grep -v -e '^[ \t]*#' -e '^[ \t]*$$' packages)" \
+	    --fs-skel-dir '$(rootfs_src)' \
+	    --packages "$$(cat '$(common_pkgs)' '$(host_pkgs)' | grep -v -e '^[ \t]*#' -e '^[ \t]*$$')" \
 	    --repositories-file /etc/apk/repositories \
 	    --timezone 'Canada/Eastern' \
 	    --script-chroot \
