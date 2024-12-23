@@ -71,12 +71,14 @@ mosh
 mpv
 nano
 ncurses-dev
+nvme-cli
 openresolv
 openssh
 openssl
 openssl-dev
 patch
 perl
+pciutils
 pipewire
 pipewire-pulse
 pipewire-tools
@@ -93,6 +95,7 @@ sway-portalsconf
 syncthing
 tar
 thunderbird
+tmux
 tofi
 ttf-dejavu
 udev-init-scripts

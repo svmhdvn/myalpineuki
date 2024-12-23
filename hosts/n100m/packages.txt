@@ -1,0 +1,9 @@
+# firmware stuff
+intel-ucode
+linux-firmware-i915
+linux-firmware-intel
+linux-firmware-rtl_nic
+
+# graphics stuff
+mesa-vulkan-intel
+igt-gpu-tools
