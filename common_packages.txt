@@ -2,6 +2,7 @@ aerc
 alpine-base
 alpine-make-rootfs
 alpine-sdk
+atools
 bat
 bc
 bind-tools
@@ -10,14 +11,17 @@ bison
 busybox-mdev-openrc
 bzip2
 ccache
+cdrkit
 coreutils
 curl
 diffutils
 dmesg
+dmidecode
 doas
 docs
 dosfstools
 duf
+dvdbackup
 e2fsprogs
 efi-mkuki
 efibootmgr
@@ -37,6 +41,7 @@ g++
 gammastep
 gawk
 gcc
+gdb
 git
 git-diff-highlight
 git-email
@@ -54,10 +59,6 @@ libarchive-dev
 libffi-dev
 libnotify
 libva-utils
-
-# TODO add back if needed
-#linux-edge
-
 linux-headers
 lm-sensors
 make
@@ -77,16 +78,18 @@ openssh
 openssl
 openssl-dev
 patch
-perl
 pciutils
+perl
 pipewire
 pipewire-pulse
 pipewire-tools
 polkit
+pv
 ripgrep
 rsync
 seatd
 shellcheck
+signal-desktop
 slurp
 smartmontools
 speech-dispatcher
@@ -94,6 +97,7 @@ sway
 sway-portalsconf
 syncthing
 tar
+terminus-font
 thunderbird
 tmux
 tofi

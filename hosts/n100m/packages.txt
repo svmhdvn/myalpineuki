@@ -4,6 +4,13 @@ linux-firmware-i915
 linux-firmware-intel
 linux-firmware-rtl_nic
 
-# graphics stuff
-mesa-vulkan-intel
+# intel stuff
+cpupower
 igt-gpu-tools
+intel-media-driver
+mesa-vulkan-intel
+onevpl
+onevpl-intel-gpu
+
+# used to build openwrt
+arch-install-scripts
