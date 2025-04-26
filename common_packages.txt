@@ -52,10 +52,10 @@ hledger
 htop
 imv
 isync
+jujutsu
 kakoune
 kbd-bkeymaps
 keepassxc
-libarchive-dev
 libffi-dev
 libnotify
 libva-utils
@@ -68,15 +68,14 @@ meld
 mesa
 mesa-dri-gallium
 mesa-va-gallium
+micro
 mosh
 mpv
-nano
 ncurses-dev
 nvme-cli
 openresolv
 openssh
 openssl
-openssl-dev
 patch
 pciutils
 perl
@@ -99,6 +98,7 @@ syncthing
 tar
 terminus-font
 thunderbird
+timewarrior
 tmux
 tofi
 ttf-dejavu
