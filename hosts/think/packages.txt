@@ -1,0 +1,23 @@
+# firmware stuff
+amd-ucode
+linux-firmware-amdgpu
+linux-firmware-intel
+linux-firmware-mediatek
+linux-firmware-other
+linux-firmware-rtl_bt
+linux-firmware-rtl_nic
+
+# wifi stuff
+iwd
+wireguard-tools-wg
+wireless-regdb
+
+# graphics stuff
+mesa-vulkan-ati
+radeontop
+
+# used to build openwrt
+arch-install-scripts
+
+# TODO uncomment once we need to ship www/gamja
+#npm
