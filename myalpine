@@ -2,10 +2,6 @@
 
 set -eux
 
-efi_cur=/boot/efi/EFI/myalpine_cur
-efi_prev=/boot/efi/EFI/myalpine_prev
-KCFLAGS="${KCFLAGS:-} -O3 -pipe"
-
 _MYKERNELMAKE() {
   KBUILD_BUILD_TIMESTAMP='' nice make -f "${linux_src}/Makefile" O="${obj}" CC='ccache cc' KCFLAGS="${KCFLAGS}" "$@"
 }
@@ -22,10 +18,6 @@ build_kernel() {
 
     echo "MANDATORY: please install '${obj}/.config' to continue!" >&2
     exit 0
-  fi
-
-  if test "${host}" = "${thishost}"; then
-    KCFLAGS="${KCFLAGS} -march=native"
   fi
 
   curver="$(_MYKERNELMAKE -s kernelversion)"
@@ -105,7 +97,13 @@ shift $((OPTIND - 1))
 
 thishost="$(hostname)"
 : "${host:=${thishost}}"
+KCFLAGS="${KCFLAGS:-} -O3 -pipe"
+if test "${host}" = "${thishost}"; then
+  KCFLAGS="${KCFLAGS} -march=native"
+fi
 
+efi_cur=/boot/efi/EFI/myalpine_cur
+efi_prev=/boot/efi/EFI/myalpine_prev
 
 host_pkgs="hosts/${host}/packages.txt"
 

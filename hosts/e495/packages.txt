@@ -1,8 +1,8 @@
 # firmware stuff
-intel-ucode
+amd-ucode
+linux-firmware-amdgpu
 linux-firmware-intel
-linux-firmware-i915
-linux-firmware-rtw88
+linux-firmware-mediatek
 linux-firmware-other
 linux-firmware-rtl_bt
 linux-firmware-rtl_nic
@@ -13,12 +13,11 @@ wireguard-tools-wg
 wireless-regdb
 
 # graphics stuff
-mesa-vulkan-intel
-igt-gpu-tools
-intel-media-driver
+mesa-vulkan-ati
+radeontop
 
 # used to build openwrt
-#arch-install-scripts
+arch-install-scripts
 
 # TODO uncomment once we need to ship www/gamja
 #npm
