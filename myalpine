@@ -6,7 +6,7 @@ _MYKERNELMAKE() {
   KBUILD_BUILD_TIMESTAMP='' nice make -f "${linux_src}/Makefile" O="${obj}" CC='ccache cc' KCFLAGS="${KCFLAGS}" "$@"
 }
 
-# TODO automatically git commit and push to s/dotfiles/kernel_configs
+# TODO automatically git commit and push to ~/src/dotfiles/kernel_configs
 build_kernel() {
   if ! test -d "${linux_src}"; then
     mkdir -p "${linux_src}"
@@ -29,7 +29,7 @@ build_kernel() {
 
   echo "SIVA: building kernel with KCFLAGS='${KCFLAGS}'"
   _MYKERNELMAKE -j"$(nproc)"
-  cp "${obj}/.config" "${HOME}/s/dotfiles/kernel_configs/${host}_${version}.config"
+  cp "${obj}/.config" "${HOME}/src/dotfiles/kernel_configs/${host}_${version}.config"
 
   mkdir -p "${out}"
   cp "${bzImage}" "${out}/bootx64.efi"

@@ -2,6 +2,7 @@ aerc
 alpine-base
 alpine-make-rootfs
 alpine-sdk
+arch-install-scripts
 atools
 bat
 bc
@@ -12,6 +13,7 @@ busybox-mdev-openrc
 bzip2
 ccache
 cdrkit
+cmake
 coreutils
 curl
 diffutils
@@ -26,6 +28,7 @@ e2fsprogs
 efi-mkuki
 efibootmgr
 elfutils-dev
+entr
 eudev
 fd
 findutils
@@ -72,6 +75,7 @@ micro
 mosh
 mpv
 ncurses-dev
+ninja
 nvme-cli
 openresolv
 openssh
