@@ -6,6 +6,36 @@ _MYKERNELMAKE() {
   KBUILD_BUILD_TIMESTAMP='' nice make -f "${linux_src}/Makefile" O="${obj}" CC='ccache cc' KCFLAGS="${KCFLAGS}" "$@"
 }
 
+uncompress_firmware() {
+  # TODO file ticket for upstream aports to split intel-ucode
+  # TODO figure this out properly with hostname
+  #if test "${intel_ucode}" -eq 1; then
+    mkdir -p "${fw_dest}/intel-ucode"
+    iucode_tool \
+      --scan-system \
+      --list \
+      --write-firmware="${fw_dest}/intel-ucode" \
+      --overwrite \
+      -tr /boot/intel-ucode.img
+  #fi
+  (
+    . "${obj}/.config"
+    for fz in ${CONFIG_EXTRA_FIRMWARE}; do
+      mkdir -p "${fw_dest}/$(dirname "${fz}")"
+      if test -e "/lib/firmware/${fz}.zst"; then
+        zstd -df "/lib/firmware/${fz}.zst" -o "${fw_dest}/${fz}"
+      elif test -e "/lib/firmware/${fz}"; then
+        cp "/lib/firmware/${fz}" "${fw_dest}/${fz}"
+      elif test -e "${fw_dest}/${fz}"; then
+        echo "Found pre-existing firmware '${fw_dest}/${fz}', skipping." >&2
+      else
+        echo "ERROR: could not find source for '${fz}', please locate!" >&2
+        exit 1
+      fi
+    done
+  )
+}
+
 # TODO automatically git commit and push to ~/src/dotfiles/kernel_configs
 build_kernel() {
   if ! test -d "${linux_src}"; then
@@ -28,6 +58,7 @@ build_kernel() {
   fi
 
   echo "SIVA: building kernel with KCFLAGS='${KCFLAGS}'"
+  uncompress_firmware
   _MYKERNELMAKE -j"$(nproc)"
   cp "${obj}/.config" "${HOME}/src/dotfiles/kernel_configs/${host}_${version}.config"
 
@@ -112,6 +143,7 @@ rootfs="${build}/rootfs"
 linux_src="${build}/linux-stable"
 
 obj="${build}/obj"
+fw_dest="${build}/siva_uncompressed_firmware"
 bzImage="${obj}/arch/x86/boot/bzImage"
 # NOTE: use vmlinuz-edge in case a newer custom kernel breaks
 #bzImage="${rootfs}/boot/vmlinuz-edge"
