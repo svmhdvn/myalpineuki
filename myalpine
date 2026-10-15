@@ -3,7 +3,8 @@
 set -eux
 
 _MYKERNELMAKE() {
-  KBUILD_BUILD_TIMESTAMP='' nice make -f "${linux_src}/Makefile" O="${obj}" CC='ccache cc' KCFLAGS="${KCFLAGS}" "$@"
+  #KBUILD_BUILD_TIMESTAMP='' nice make -f "${linux_src}/Makefile" O="${obj}" LLVM=1 CC='ccache clang' KCFLAGS="-O3 -pipe" "$@"
+  KBUILD_BUILD_TIMESTAMP='' make -f "${linux_src}/Makefile" O="${obj}" CC='ccache cc' "$@"
 }
 
 uncompress_firmware() {
@@ -57,7 +58,6 @@ build_kernel() {
     _MYKERNELMAKE oldconfig
   fi
 
-  echo "SIVA: building kernel with KCFLAGS='${KCFLAGS}'"
   uncompress_firmware
   _MYKERNELMAKE -j"$(nproc)"
   cp "${obj}/.config" "${HOME}/src/dotfiles/kernel_configs/${host}_${version}.config"
@@ -126,12 +126,7 @@ do
 done
 shift $((OPTIND - 1))
 
-thishost="$(hostname)"
-: "${host:=${thishost}}"
-KCFLAGS="${KCFLAGS:-} -O3 -pipe"
-if test "${host}" = "${thishost}"; then
-  KCFLAGS="${KCFLAGS} -march=native"
-fi
+: ${host:="$(hostname)"}
 
 efi_cur=/boot/efi/EFI/myalpine_cur
 efi_prev=/boot/efi/EFI/myalpine_prev
@@ -159,5 +154,7 @@ case "$1" in
   rollback) _rollback ;;
   latest) query_latest_version ;;
   config) _MYKERNELMAKE menuconfig ;;
+  oldconfig) _MYKERNELMAKE oldconfig ;;
+  clean) _MYKERNELMAKE clean ;;
   *) usage; exit 1 ;;
 esac
